@@ -15,7 +15,7 @@ export default defineConfig({
   testDir: "tests",
   timeout: 30_000,
   retries: 1, // 浏览器 E2E flaky 缓解（REQ-2026-001 风险表）
-  reporter: [["list"]],
+  reporter: [["list"], ["./src/trace-reporter.ts"]],
   // ADR-0030 Decision 2：projects 顺序即 parity 报告呈现顺序，勿随意调整。
   projects: TARGETS.map((t) => ({
     name: t.name,

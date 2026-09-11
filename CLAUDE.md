@@ -15,12 +15,14 @@ SaaS身份平台前端E2E一致性（`saas-identity-platform-e2e`，技术栈 `g
 - **mock-friendly**：安装 + 测试必须在无 Key、无 Docker、无网下全绿
 - **功能清单是锚点**：改 `docs/functions/function-tree.md` 走 `/tree-change` 提案，由人批准；
   改功能与改功能清单必须同一个 commit；废弃只改状态，编号永不复用；禁止给 skip 的测试挂功能 ID
-
-- （在这里写死本项目的硬约束）
+- **用例禁止分叉**：同一份 spec × 三 project（react/vue/nextjs）；spec 内出现 per-端 分支 = parity 失效
+- **选择器只锚 `data-fn` 与用户可观察行为**（loading/empty/error/禁用/提示）；禁止锚 DOM 结构、组件库、CSS
+- msw 是**独立 HTTP mock server**（传统 Mock Server 模式，真 TCP :5100，CORS/cookie 真语义）；
+  本仓零 npm 依赖它，起服约定见 `docs/conventions/e2e-runtime.md`（外部起服，不自起）
 
 ## 3. 技术栈与版本（钉死于 version-lock.json）
 
-任意语言。只有 suite 的 L0/L5，L1..L4 留空待你填。。明细见 `version-lock.json` 与 README.md 技术栈表。
+Playwright（@playwright/test）+ TypeScript。明细见 `version-lock.json` 与 README.md 技术栈表。
 
 门禁命令见 `.harness/stack.json`。**不要改它来让门变松。**
 

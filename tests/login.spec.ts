@@ -16,7 +16,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/login");
 });
 
-test("AC-1 登录表单渲染且提交按钮挂密码登录 data-fn 锚点 M95.F02.I01", async ({ page }) => {
+test("AC-1 登录表单渲染且提交按钮挂密码登录 data-fn 锚点 M95.F02.I01 覆盖 M01.F04.I03", async ({ page }) => {
   await expect(page.locator("#username")).toBeVisible();
   await expect(page.locator("#password")).toBeVisible();
   const submit = page.locator(LOGIN_ANCHOR);
@@ -24,7 +24,7 @@ test("AC-1 登录表单渲染且提交按钮挂密码登录 data-fn 锚点 M95.F
   await expect(submit).toBeEnabled();
 });
 
-test("AC-2 有效凭据登录落 /tenants 且请求体携带 saas-console clientId M95.F02.I01", async ({ page }) => {
+test("AC-2 有效凭据登录落 /tenants 且请求体携带 saas-console clientId M95.F02.I01 覆盖 M01.F04.I03", async ({ page }) => {
   const loginReq = page.waitForRequest(
     (r) => r.url().includes("/auth/login") && r.method() === "POST",
   );
@@ -39,7 +39,7 @@ test("AC-2 有效凭据登录落 /tenants 且请求体携带 saas-console client
   await expect(page.locator("main, nav, aside, [data-fn]").first()).toBeVisible();
 });
 
-test("AC-3 错误凭据停留 /login 并出错误提示 M95.F02.I01", async ({ page }) => {
+test("AC-3 错误凭据停留 /login 并出错误提示 M95.F02.I01 覆盖 M01.F04.I03", async ({ page }) => {
   await page.locator("#username").fill(USERNAME);
   await page.locator("#password").fill("e2e-wrong-password");
   await page.locator(LOGIN_ANCHOR).click();

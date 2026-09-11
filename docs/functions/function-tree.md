@@ -34,7 +34,7 @@
 | 模块 ID | 模块名称 | 说明 | 状态 |
 |---|---|---|---|
 | M01 | （init_project 占位） | 从未是真实功能；本仓真实模块见 M95 | 已废弃 |
-| M95 | 前端 E2E 一致性验证 | 同一套 Playwright 用例指三前端地址，验交互/状态/异常路径三端一致 | 规划 |
+| M95 | 前端 E2E 一致性验证 | 同一套 Playwright 用例指三前端地址，验交互/状态/异常路径三端一致 | 已上线 |
 
 ---
 
@@ -58,34 +58,36 @@
 
 | 功能 ID | 功能名称 | 说明 | 状态 |
 |---|---|---|---|
-| M95.F01 | 三端参数化运行 | 同一套 Playwright 用例 × 三个 baseURL（react/vue/nextjs）跑三遍；用例分叉即 parity 失效 | 规划 |
-| M95.F02 | 行为锚点断言 | 选择器锚 `data-fn`，断言锚用户可观察行为（loading/empty/error/禁用/提示），不锚 DOM 与组件库 | 规划 |
-| M95.F03 | trace 映射 | Playwright 结果 → 本仓 `.state/trace.json` 的 I 级 ID 映射（fnReporter onFinished 教训内置） | 规划 |
-| M95.F04 | 后端目标 | 默认 saas-msw（无 Key/无 Docker/无网全绿）；live 模式对真实后端，不进默认门 | 规划 |
+| M95.F01 | 三端参数化运行 | 同一套 Playwright 用例 × 三个 baseURL（react/vue/nextjs）跑三遍；用例分叉即 parity 失效 | 已上线 |
+| M95.F02 | 行为锚点断言 | 选择器锚 `data-fn`，断言锚用户可观察行为（loading/empty/error/禁用/提示），不锚 DOM 与组件库 | 已上线 |
+| M95.F03 | trace 映射 | Playwright 结果 → 本仓 `.state/trace.json` 的 I 级 ID 映射（fnReporter onFinished 教训内置） | 已上线 |
+| M95.F04 | 后端目标 | 默认 saas-msw（无 Key/无 Docker/无网全绿）；live 模式对真实后端，不进默认门 | 已上线 |
 
 ### M95.F01 三端参数化运行
 
 | 子项 ID | 名称 | 类型 | 交付 | 说明 | 状态 |
 |---|---|---|---|---|---|
-| M95.F01.I01 | Playwright 三端 project 配置 | 接口 | 后端 | 同一 spec × react/vue/nextjs 三个 baseURL project；URL 走 env fail-fast，禁默认值兜底 | 规划 |
+| M95.F01.I01 | Playwright 三端 project 配置 | 接口 | 后端 | 同一 spec × react/vue/nextjs 三个 baseURL project；URL 走 env fail-fast，禁默认值兜底 | 已上线 |
+| M95.F01.I02 | CI 编排（tag/nightly） | 接口 | 后端 | sibling checkout 4 被测仓 + env 生成 + healthcheck + playwright + 产物上传（ADR-0030 Decision 7） | 已上线 |
 
 ### M95.F02 行为锚点断言
 
 | 子项 ID | 名称 | 类型 | 交付 | 说明 | 状态 |
 |---|---|---|---|---|---|
-| M95.F02.I01 | 密码登录主流程用例 | 页面 | 后端 | 表单渲染（data-fn=M01.F04.I03）+ 有效凭据落 /tenants + 错误凭据停留并提示；覆盖 BASE M01.F04.I03 | 规划 |
+| M95.F02.I01 | 密码登录主流程用例 | 接口 | 后端 | 表单渲染（data-fn=M01.F04.I03）+ 有效凭据落 /tenants + 错误凭据停留并提示；覆盖 BASE M01.F04.I03 | 已上线 |
+| M95.F02.I02 | 租户管理 CRUD 用例 | 接口 | 后端 | 列表/创建/更新/删除 × 三端；写操作自产自销（uniqueCode）；覆盖 BASE M00.F01.I01/I02/I04/I05 | 已上线 |
 
 ### M95.F03 trace 映射
 
 | 子项 ID | 名称 | 类型 | 交付 | 说明 | 状态 |
 |---|---|---|---|---|---|
-| M95.F03.I01 | Playwright→trace.json 映射器 | 接口 | 后端 | Playwright 结果 → 本仓 .state/trace.json；skip 用例 fns 必空；onFinished 完整任务树教训内置 | 规划 |
+| M95.F03.I01 | Playwright→trace.json 映射器 | 接口 | 后端 | Playwright 结果 → 本仓 .state/trace.json；skip 用例 fns 必空；onFinished 完整任务树教训内置 | 已上线 |
 
 ### M95.F04 后端目标
 
 | 子项 ID | 名称 | 类型 | 交付 | 说明 | 状态 |
 |---|---|---|---|---|---|
-| M95.F04.I01 | msw 默认目标接线 | 接口 | 后端 | 三前端 dev server 的 API 指向 saas-msw；无 Key/无 Docker/无网全绿 | 规划 |
+| M95.F04.I01 | msw 默认目标接线 | 接口 | 后端 | 三前端 dev server 的 API 指向 saas-msw；无 Key/无 Docker/无网全绿 | 已上线 |
 
 ---
 

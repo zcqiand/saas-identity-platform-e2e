@@ -4,10 +4,27 @@
   "functions": {
     "modules": 2,
     "features": 5,
-    "items": 5
+    "items": 7
   },
-  "warnings_total": 0,
-  "warnings": {},
+  "warnings_total": 10,
+  "warnings": {
+    "已上线但无设计映射": [
+      "M95.F02.I02"
+    ],
+    "已上线但无测试引用": [
+      "M95.F01.I02",
+      "M95.F03.I01",
+      "M95.F04.I01"
+    ],
+    "已上线但不在任何流程且非孤儿白名单": [
+      "M95.F01.I01",
+      "M95.F01.I02",
+      "M95.F02.I01",
+      "M95.F02.I02",
+      "M95.F03.I01",
+      "M95.F04.I01"
+    ]
+  },
   "unreachable_shipped": [],
   "function_map": {
     "M01.F01.I01": {
@@ -27,49 +44,96 @@
     },
     "M95.F01.I01": {
       "name": "Playwright 三端 project 配置",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [
         "docs\\requirements\\REQ-2026-001-e2e-login-main-flow.md"
       ],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
+      "tests": [
+        "tests/env-contract.spec.ts::config 声明恰好三个 project：nextjs/react/vue（顺序固定）M95.F01.I01",
+        "tests/env-contract.spec.ts::三端 baseURL env 全部就绪且互不相同 M95.F01.I01"
+      ],
+      "entry": []
+    },
+    "M95.F01.I02": {
+      "name": "CI 编排（tag/nightly）",
+      "status": "已上线",
+      "type": "接口",
+      "requirements": [
+        "docs\\requirements\\REQ-2026-002-trace-and-gates.md"
+      ],
+      "flows": [],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [],
       "entry": []
     },
     "M95.F02.I01": {
       "name": "密码登录主流程用例",
-      "status": "规划",
-      "type": "页面",
-      "requirements": [
-        "docs\\requirements\\REQ-2026-001-e2e-login-main-flow.md"
-      ],
-      "flows": [],
-      "designs": [],
-      "tests": [],
-      "entry": []
-    },
-    "M95.F03.I01": {
-      "name": "Playwright→trace.json 映射器",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [
         "docs\\requirements\\REQ-2026-001-e2e-login-main-flow.md"
       ],
       "flows": [],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
+      "tests": [
+        "tests/login.spec.ts::AC-1 登录表单渲染且提交按钮挂密码登录 data-fn 锚点 M95.F02.I01 覆盖 M01.F04.I03",
+        "tests/login.spec.ts::AC-2 有效凭据登录落 /tenants 且请求体携带 saas-console clientId M95.F02.I01 覆盖 M01.F04.I03",
+        "tests/login.spec.ts::AC-3 错误凭据停留 /login 并出错误提示 M95.F02.I01 覆盖 M01.F04.I03"
+      ],
+      "entry": []
+    },
+    "M95.F02.I02": {
+      "name": "租户管理 CRUD 用例",
+      "status": "已上线",
+      "type": "接口",
+      "requirements": [
+        "docs\\requirements\\REQ-2026-003-tenant-crud.md"
+      ],
+      "flows": [],
       "designs": [],
+      "tests": [
+        "tests/tenant-crud.spec.ts::AC-1 租户列表渲染 seed 三行 M95.F02.I02 覆盖 M00.F01.I01",
+        "tests/tenant-crud.spec.ts::AC-2 创建租户：行出现且 toast 提示 M95.F02.I02 覆盖 M00.F01.I02",
+        "tests/tenant-crud.spec.ts::AC-3 更新租户：名称变更落行 M95.F02.I02 覆盖 M00.F01.I04",
+        "tests/tenant-crud.spec.ts::AC-4 删除租户：确认后行消失 M95.F02.I02 覆盖 M00.F01.I05"
+      ],
+      "entry": []
+    },
+    "M95.F03.I01": {
+      "name": "Playwright→trace.json 映射器",
+      "status": "已上线",
+      "type": "接口",
+      "requirements": [
+        "docs\\requirements\\REQ-2026-001-e2e-login-main-flow.md",
+        "docs\\requirements\\REQ-2026-002-trace-and-gates.md"
+      ],
+      "flows": [],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [],
       "entry": []
     },
     "M95.F04.I01": {
       "name": "msw 默认目标接线",
-      "status": "规划",
+      "status": "已上线",
       "type": "接口",
       "requirements": [
         "docs\\requirements\\REQ-2026-001-e2e-login-main-flow.md"
       ],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [],
       "entry": []
     }
