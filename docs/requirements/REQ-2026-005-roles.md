@@ -5,7 +5,7 @@
 | 提出人 | 项目所有者 |
 | 提出日期 | 2026-09-11 |
 | 优先级 | P0 |
-| 状态 | ③a 已验收；③b（BASE 菜单授权的保存/清空子项）待下批（menus fixture 契约对齐先行） |
+| 状态 | 已验收（③a + ③b 均完成，菜单授权 9/9 三端绿） |
 | 关联 ADR | ADR-0030 |
 
 ## 需求描述
@@ -26,6 +26,9 @@
    （权限面由菜单授权承接）。BASE 树该子项状态待 tree-change 裁决。
 4. react/nextjs 删除死「权限」列（SysRole 无 permissionIds）。
 
-## 遗留（③b）
-- sys_menu fixture 契约对齐（appId/code/name → clientId/title 等，41 条 + 引用链 + 多消费方）
-- 菜单授权页 E2E（BASE 菜单授权模块的保存/清空/查询入口三子项；跨仓 ID 字面见 spec）
+## ③b（已完成）
+- sys_menu fixture 契约对齐：appId→clientId / name→title / code 删除（MENU_IDS 键改按 path 派生）/
+  type 枚举 page|group→menu|directory / status 数字化（1=active）；shim/seed-db/三端页面与 mock 同步。
+  战果：iamTenants 是退化断言（双侧恒 undefined）；vue 显示 27 vs react/nextjs 4 的初始 grant 计数
+  系本人断言臆断（fixture 真值 27）；写操作跨用例污染靠「自产自销还原」纪律解决。
+- role-menu-grant.spec：9/9 三端绿。

@@ -4,14 +4,16 @@
   "functions": {
     "modules": 2,
     "features": 5,
-    "items": 9
+    "items": 11
   },
-  "warnings_total": 14,
+  "warnings_total": 18,
   "warnings": {
     "已上线但无设计映射": [
       "M95.F02.I02",
       "M95.F02.I03",
-      "M95.F02.I04"
+      "M95.F02.I04",
+      "M95.F02.I05",
+      "M95.F02.I06"
     ],
     "已上线但无测试引用": [
       "M95.F01.I02",
@@ -25,6 +27,8 @@
       "M95.F02.I02",
       "M95.F02.I03",
       "M95.F02.I04",
+      "M95.F02.I05",
+      "M95.F02.I06",
       "M95.F03.I01",
       "M95.F04.I01"
     ]
@@ -141,6 +145,35 @@
         "tests/role-crud.spec.ts::AC-2 创建角色：行出现 M95.F02.I04 覆盖创建",
         "tests/role-crud.spec.ts::AC-3 更新角色：名称落行 M95.F02.I04 覆盖更新",
         "tests/role-crud.spec.ts::AC-4 删除角色：确认后行消失 M95.F02.I04 覆盖删除"
+      ],
+      "entry": []
+    },
+    "M95.F02.I05": {
+      "name": "角色菜单授权用例",
+      "status": "已上线",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "tests/role-menu-grant.spec.ts::AC-1 渲染按 client 分组的菜单矩阵 M95.F02.I05 覆盖菜单列表",
+        "tests/role-menu-grant.spec.ts::AC-2 勾选+保存：调 set API 且计数更新 M95.F02.I05 覆盖整批设置",
+        "tests/role-menu-grant.spec.ts::AC-3 清空：计数归零后保存空集 M95.F02.I05 覆盖清空"
+      ],
+      "entry": []
+    },
+    "M95.F02.I06": {
+      "name": "OAuth SSO 跳板全链用例",
+      "status": "已上线",
+      "type": "接口",
+      "requirements": [
+        "docs\\requirements\\REQ-2026-006-oauth-jump.md"
+      ],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "tests/oauth-jump.spec.ts::AC-1 跳板登录全链：authorize 领 code 回跳 RP（code+state 原样透传）M95.F02.I06",
+        "tests/oauth-jump.spec.ts::AC-2 非法 redirect_uri：authorize 拒绝，停留登录页 M95.F02.I06"
       ],
       "entry": []
     },
