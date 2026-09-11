@@ -48,7 +48,7 @@ const PAGES: PageManifest[] = [
   },
   {
     fnId: "M04.F04.I01",
-    headers: ["Code / 路径", "名称", "类型", "排序", "状态", "操作"],
+    headers: ["名称", "类型", "状态", "操作"],
     buttons: ["新建菜单", "移动", "编辑", "删除"],
   },
 ];
