@@ -11,6 +11,11 @@
 | M95.F01.I01 | playwright.config.ts（三 project） | — | — | — | ../shared ui-interaction-spec §运行时 | 已上线 |
 | M95.F01.I02 | .github/workflows/ci.yml | — | — | — | ADR-0030 Decision 7 | 已上线 |
 | M95.F02.I01 | tests/login.spec.ts | — | — | — | ../shared ui-interaction-spec 密码登录节 | 已上线 |
+| M95.F02.I02 | tests/tenant-crud.spec.ts | — | — | — | REQ-2026-003 AC + ADR-0030 Decision 4 | 已上线 |
+| M95.F02.I03 | tests/session.spec.ts | — | — | — | REQ-2026-004 AC | 已上线 |
+| M95.F02.I04 | tests/role-crud.spec.ts | — | — | — | REQ-2026-005 ③a AC | 已上线 |
+| M95.F02.I05 | tests/role-menu-grant.spec.ts | — | — | — | REQ-2026-005 ③b AC | 已上线 |
+| M95.F02.I06 | tests/oauth-jump.spec.ts | — | — | — | REQ-2026-006 AC + RFC 6749 §4.1 | 已上线 |
 | M95.F03.I01 | src/trace-reporter.ts | — | — | — | suite 契约二（harness.py） | 已上线 |
 | M95.F04.I01 | docs/conventions/e2e-runtime.md | — | — | — | ADR-0030 Decision 3 | 已上线 |
 

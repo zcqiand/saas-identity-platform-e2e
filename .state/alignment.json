@@ -6,20 +6,8 @@
     "features": 5,
     "items": 11
   },
-  "warnings_total": 18,
+  "warnings_total": 10,
   "warnings": {
-    "已上线但无设计映射": [
-      "M95.F02.I02",
-      "M95.F02.I03",
-      "M95.F02.I04",
-      "M95.F02.I05",
-      "M95.F02.I06"
-    ],
-    "已上线但无测试引用": [
-      "M95.F01.I02",
-      "M95.F03.I01",
-      "M95.F04.I01"
-    ],
     "已上线但不在任何流程且非孤儿白名单": [
       "M95.F01.I01",
       "M95.F01.I02",
@@ -78,7 +66,9 @@
       "designs": [
         "docs\\design\\design-function-map.md"
       ],
-      "tests": [],
+      "tests": [
+        "tests/infra-contract.spec.ts::CI 编排：tag/nightly 触发 + 4 sibling checkout + healthcheck + 产物上传 M95.F01.I02"
+      ],
       "entry": []
     },
     "M95.F02.I01": {
@@ -107,7 +97,9 @@
         "docs\\requirements\\REQ-2026-003-tenant-crud.md"
       ],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "tests/tenant-crud.spec.ts::AC-1 租户列表渲染 seed 三行 M95.F02.I02 覆盖 M00.F01.I01",
         "tests/tenant-crud.spec.ts::AC-2 创建租户：行出现且 toast 提示 M95.F02.I02 覆盖 M00.F01.I02",
@@ -124,7 +116,9 @@
         "docs\\requirements\\REQ-2026-004-session.md"
       ],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "tests/session.spec.ts::AC-1 登出：session 清理落回登录页 M95.F02.I03 覆盖 M01.F04.I06",
         "tests/session.spec.ts::AC-2 切换租户：调 switch API + 切换器显示新租户 M95.F02.I03 覆盖 M01.F03.I02"
@@ -139,7 +133,9 @@
         "docs\\requirements\\REQ-2026-005-roles.md"
       ],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "tests/role-crud.spec.ts::AC-1 角色列表渲染 seed 行 M95.F02.I04 覆盖角色列表",
         "tests/role-crud.spec.ts::AC-2 创建角色：行出现 M95.F02.I04 覆盖创建",
@@ -154,7 +150,9 @@
       "type": "接口",
       "requirements": [],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "tests/role-menu-grant.spec.ts::AC-1 渲染按 client 分组的菜单矩阵 M95.F02.I05 覆盖菜单列表",
         "tests/role-menu-grant.spec.ts::AC-2 勾选+保存：调 set API 且计数更新 M95.F02.I05 覆盖整批设置",
@@ -170,7 +168,9 @@
         "docs\\requirements\\REQ-2026-006-oauth-jump.md"
       ],
       "flows": [],
-      "designs": [],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
       "tests": [
         "tests/oauth-jump.spec.ts::AC-1 跳板登录全链：authorize 领 code 回跳 RP（code+state 原样透传）M95.F02.I06",
         "tests/oauth-jump.spec.ts::AC-2 非法 redirect_uri：authorize 拒绝，停留登录页 M95.F02.I06"
@@ -189,7 +189,10 @@
       "designs": [
         "docs\\design\\design-function-map.md"
       ],
-      "tests": [],
+      "tests": [
+        "tests/infra-contract.spec.ts::trace 映射器已接入 playwright.config（onEnd 落盘 .state/trace.json） M95.F03.I01",
+        "tests/infra-contract.spec.ts::trace 映射器行为：收 M95.*、滤 BASE、inert 清空、retries 去重；跑完还原产物 M95.F03.I01"
+      ],
       "entry": []
     },
     "M95.F04.I01": {
@@ -203,7 +206,9 @@
       "designs": [
         "docs\\design\\design-function-map.md"
       ],
-      "tests": [],
+      "tests": [
+        "tests/infra-contract.spec.ts::msw 默认目标接线：三端端口 5101-5103 + API base 约定 :5100（e2e-runtime §2/§3） M95.F04.I01"
+      ],
       "entry": []
     }
   }
