@@ -16,6 +16,7 @@
 | M95.F02.I04 | tests/role-crud.spec.ts | — | — | — | REQ-2026-005 ③a AC | 已上线 |
 | M95.F02.I05 | tests/role-menu-grant.spec.ts | — | — | — | REQ-2026-005 ③b AC | 已上线 |
 | M95.F02.I06 | tests/oauth-jump.spec.ts | — | — | — | REQ-2026-006 AC + RFC 6749 §4.1 | 已上线 |
+| M95.F02.I07 | tests/smoke-nav.spec.ts | — | — | — | suite docs/audit-reports/2026-09-11-saas-test-landscape.md 方案 A | 已上线 |
 | M95.F03.I01 | src/trace-reporter.ts | — | — | — | suite 契约二（harness.py） | 已上线 |
 | M95.F04.I01 | docs/conventions/e2e-runtime.md | — | — | — | ADR-0030 Decision 3 | 已上线 |
 

@@ -4,10 +4,14 @@
   "functions": {
     "modules": 2,
     "features": 5,
-    "items": 11
+    "items": 12
   },
-  "warnings_total": 0,
-  "warnings": {},
+  "warnings_total": 1,
+  "warnings": {
+    "已上线但不在任何流程且非孤儿白名单": [
+      "M95.F02.I07"
+    ]
+  },
   "unreachable_shipped": [],
   "function_map": {
     "M01.F01.I01": {
@@ -163,6 +167,21 @@
       "tests": [
         "tests/oauth-jump.spec.ts::AC-1 跳板登录全链：authorize 领 code 回跳 RP（code+state 原样透传）M95.F02.I06",
         "tests/oauth-jump.spec.ts::AC-2 非法 redirect_uri：authorize 拒绝，停留登录页 M95.F02.I06"
+      ],
+      "entry": []
+    },
+    "M95.F02.I07": {
+      "name": "nav 冒烟遍历用例",
+      "status": "已上线",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
+      "tests": [
+        "tests/smoke-nav.spec.ts::AC-1 nav 冒烟遍历：全部页面可达、有数据、无错误 M95.F02.I07",
+        "tests/smoke-nav.spec.ts::AC-2 直接访问侧边栏全部路由无 404 M95.F02.I07"
       ],
       "entry": []
     },
