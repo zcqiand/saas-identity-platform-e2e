@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "project": "saas-identity-platform-e2e",
+  "functions": {
+    "modules": 2,
+    "features": 5,
+    "items": 5
+  },
+  "warnings_total": 0,
+  "warnings": {},
+  "unreachable_shipped": [],
+  "function_map": {
+    "M01.F01.I01": {
+      "name": "（init_project 占位）",
+      "status": "已废弃",
+      "type": "查询",
+      "requirements": [],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "output\\saas-identity-platform-contract-test\\tests\\me.test.ts:612 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\me.test.ts:755 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\path.test.ts:1066 (path)",
+        "output\\saas-identity-platform-contract-test\\tests\\path.test.ts:1111 (path)"
+      ],
+      "entry": []
+    },
+    "M95.F01.I01": {
+      "name": "Playwright 三端 project 配置",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [
+        "docs\\requirements\\REQ-2026-001-e2e-login-main-flow.md"
+      ],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M95.F02.I01": {
+      "name": "密码登录主流程用例",
+      "status": "规划",
+      "type": "页面",
+      "requirements": [
+        "docs\\requirements\\REQ-2026-001-e2e-login-main-flow.md"
+      ],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M95.F03.I01": {
+      "name": "Playwright→trace.json 映射器",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [
+        "docs\\requirements\\REQ-2026-001-e2e-login-main-flow.md"
+      ],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    },
+    "M95.F04.I01": {
+      "name": "msw 默认目标接线",
+      "status": "规划",
+      "type": "接口",
+      "requirements": [
+        "docs\\requirements\\REQ-2026-001-e2e-login-main-flow.md"
+      ],
+      "flows": [],
+      "designs": [],
+      "tests": [],
+      "entry": []
+    }
+  }
+}

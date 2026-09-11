@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "suite_version": "0.6.0",
+  "project": "saas-identity-platform-e2e",
+  "stack": "generic",
+  "gates": {},
+  "trace_cmd": [],
+  "trace_env": {},
+  "source_dirs": [
+    "src"
+  ],
+  "test_dirs": [
+    "tests"
+  ]
+}

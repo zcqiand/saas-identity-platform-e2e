@@ -1,0 +1,12 @@
+{
+  "name": "@saas/identity-platform-e2e",
+  "version": "0.1.0",
+  "description": "SaaS Identity Platform — frontend E2E parity suite. One Playwright spec, parameterized across react/vue/nextjs baseURLs (ADR-0030).",
+  "private": true,
+  "scripts": {
+    "e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
+  }
+}
