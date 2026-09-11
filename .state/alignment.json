@@ -183,7 +183,8 @@
       "tests": [
         "tests/smoke-nav.spec.ts::AC-1 nav 冒烟遍历：全部页面可达、有数据、无错误 M95.F02.I07",
         "tests/smoke-nav.spec.ts::AC-2 直接访问侧边栏全部路由无 404 M95.F02.I07",
-        "tests/smoke-nav.spec.ts::AC-3 编辑菜单弹窗：类型/父菜单/状态必须回填行数据 M95.F02.I07"
+        "tests/smoke-nav.spec.ts::AC-3 编辑菜单弹窗：类型/父菜单/状态必须回填行数据 M95.F02.I07",
+        "tests/smoke-nav.spec.ts::AC-4 会话过期/无效：API 401 后自动踢回登录页 M95.F02.I07"
       ],
       "entry": []
     },

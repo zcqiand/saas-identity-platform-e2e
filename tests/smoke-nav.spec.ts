@@ -112,3 +112,18 @@ test("AC-3 编辑菜单弹窗：类型/父菜单/状态必须回填行数据 M95
   expect(/目录|页面|按钮/.test(dialogText), "类型下拉应回填契约词（目录/页面/按钮）").toBe(true);
   expect(/启用|停用/.test(dialogText), "状态下拉应回填 启用/停用").toBe(true);
 });
+
+test("AC-4 会话过期/无效：API 401 后自动踢回登录页 M95.F02.I07", async ({ page }) => {
+  // 三端各自的会话 key 全部预置失效 token（spec 不分叉，各端只读自己的 key）
+  await page.goto("/login");
+  await page.evaluate(() => {
+    const expired = { accessToken: "expired-token" };
+    localStorage.setItem("saas.tenant", JSON.stringify({ ...expired, currentTenantId: "00000000-0000-0000-0000-000000000001" }));
+    localStorage.setItem("saas.react.session", JSON.stringify(expired));
+    localStorage.setItem("saas.vue.session", JSON.stringify(expired));
+  });
+  await page.goto("/tenants");
+  // 任一 API 返 401 → 拦截器清会话 + 跳登录（RequireAuth 兜底同样落 /login）
+  await page.waitForURL(/\/login/, { timeout: 15_000 });
+  await expect(page.locator("#username").first()).toBeVisible();
+});
