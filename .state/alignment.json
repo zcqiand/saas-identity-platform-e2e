@@ -4,12 +4,13 @@
   "functions": {
     "modules": 2,
     "features": 5,
-    "items": 12
+    "items": 13
   },
-  "warnings_total": 1,
+  "warnings_total": 2,
   "warnings": {
     "已上线但不在任何流程且非孤儿白名单": [
-      "M95.F02.I07"
+      "M95.F02.I07",
+      "M95.F02.I08"
     ]
   },
   "unreachable_shipped": [],
@@ -181,7 +182,28 @@
       ],
       "tests": [
         "tests/smoke-nav.spec.ts::AC-1 nav 冒烟遍历：全部页面可达、有数据、无错误 M95.F02.I07",
-        "tests/smoke-nav.spec.ts::AC-2 直接访问侧边栏全部路由无 404 M95.F02.I07"
+        "tests/smoke-nav.spec.ts::AC-2 直接访问侧边栏全部路由无 404 M95.F02.I07",
+        "tests/smoke-nav.spec.ts::AC-3 编辑菜单弹窗：类型/父菜单/状态必须回填行数据 M95.F02.I07"
+      ],
+      "entry": []
+    },
+    "M95.F02.I08": {
+      "name": "三端 UI 结构指纹用例",
+      "status": "已上线",
+      "type": "接口",
+      "requirements": [],
+      "flows": [],
+      "designs": [
+        "docs\\design\\design-function-map.md"
+      ],
+      "tests": [
+        "tests/ui-parity.spec.ts::[M00.F01.I01] 表头列与主按钮三端一致 M95.F02.I08",
+        "tests/ui-parity.spec.ts::[M00.F02.I01] 搜索/筛选控件占位符三端一致 M95.F02.I08",
+        "tests/ui-parity.spec.ts::[M00.F02.I01] 表头列与主按钮三端一致 M95.F02.I08",
+        "tests/ui-parity.spec.ts::[M00.F03.I01] 表头列与主按钮三端一致 M95.F02.I08",
+        "tests/ui-parity.spec.ts::[M00.F05.I01] 表头列与主按钮三端一致 M95.F02.I08",
+        "tests/ui-parity.spec.ts::[M04.F01.I01] 表头列与主按钮三端一致 M95.F02.I08",
+        "tests/ui-parity.spec.ts::[M04.F04.I01] 表头列与主按钮三端一致 M95.F02.I08"
       ],
       "entry": []
     },

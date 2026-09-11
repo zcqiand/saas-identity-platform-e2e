@@ -98,6 +98,8 @@ test("AC-3 编辑菜单弹窗：类型/父菜单/状态必须回填行数据 M95
   await page.getByRole("button", { name: "编辑" }).first().click();
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
+  // reka Select 的选中项文本解析在数据/挂载完成后才稳定 —— 短暂 settle 防抖
+  await page.waitForTimeout(400);
 
   // 每个 select 都必须有值（空值 = 显示「请选择」占位符 = 回填失败）
   await expect(
