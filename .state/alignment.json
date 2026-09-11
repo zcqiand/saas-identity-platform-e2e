@@ -6,21 +6,8 @@
     "features": 5,
     "items": 11
   },
-  "warnings_total": 10,
-  "warnings": {
-    "已上线但不在任何流程且非孤儿白名单": [
-      "M95.F01.I01",
-      "M95.F01.I02",
-      "M95.F02.I01",
-      "M95.F02.I02",
-      "M95.F02.I03",
-      "M95.F02.I04",
-      "M95.F02.I05",
-      "M95.F02.I06",
-      "M95.F03.I01",
-      "M95.F04.I01"
-    ]
-  },
+  "warnings_total": 0,
+  "warnings": {},
   "unreachable_shipped": [],
   "function_map": {
     "M01.F01.I01": {
@@ -78,7 +65,9 @@
       "requirements": [
         "docs\\requirements\\REQ-2026-001-e2e-login-main-flow.md"
       ],
-      "flows": [],
+      "flows": [
+        "docs\\design\\flow-function-map.md"
+      ],
       "designs": [
         "docs\\design\\design-function-map.md"
       ],
