@@ -10,14 +10,14 @@ import { expect, type Page, test } from "@playwright/test";
 import { loginViaUi } from "./helpers";
 
 /** 侧边栏导航项 → 页面主列表行 testid（无列表的页面不填）。 */
-const NAV_ITEMS: Array<{ fnId: string; rowTestId?: string; emptyText?: RegExp }> = [
-  { fnId: "M00.F01.I01", rowTestId: "tenant-row" },
-  { fnId: "M00.F05.I01", rowTestId: "tenant-app-row" },
-  { fnId: "M00.F02.I01", rowTestId: "user-row" },
-  { fnId: "M00.F03.I01", rowTestId: "role-row" },
-  { fnId: "M04.F01.I01", rowTestId: "app-row" },
-  // 菜单管理是树形页，无统一行 testid —— 只断言无错误响应
-  { fnId: "M04.F04.I01" },
+const NAV_ITEMS: Array<{ fnId: string; rowTestId?: string; heading: string }> = [
+  { fnId: "M00.F01.I01", rowTestId: "tenant-row", heading: "租户管理" },
+  { fnId: "M00.F05.I01", rowTestId: "tenant-app-row", heading: "租户应用" },
+  { fnId: "M00.F02.I01", rowTestId: "user-row", heading: "用户管理" },
+  { fnId: "M00.F03.I01", rowTestId: "role-row", heading: "角色权限" },
+  { fnId: "M04.F01.I01", rowTestId: "app-row", heading: "应用管理" },
+  // 菜单管理是树形页，无统一行 testid —— 断言页标题
+  { fnId: "M04.F04.I01", heading: "菜单管理" },
 ];
 
 /** 挂上错误采集器，返回「取走当前累计错误」的函数。 */
@@ -50,7 +50,13 @@ test("AC-1 nav 冒烟遍历：全部页面可达、有数据、无错误 M95.F02
     const errors = takeErrors().filter((e) => !errorsBefore.includes(e));
     expect(errors, `页面 ${item.fnId} 出现错误：\n${errors.join("\n")}`).toEqual([]);
 
-    // 3. 有列表的页面：行数 > 0（空数据 = 死桩/faker 类假绿的直接信号）
+    // 3a. 落点必须渲染该页标题（SPA 下路由错配/空页不产生 404 —— 标题是唯一可靠信号）
+    await expect(
+      page.getByText(item.heading).first(),
+      `页面 ${item.fnId} 应渲染标题「${item.heading}」`,
+    ).toBeVisible();
+
+    // 3b. 有列表的页面：行数 > 0（空数据 = 死桩/faker 类假绿的直接信号）
     if (item.rowTestId) {
       const rows = page.locator(`[data-testid="${item.rowTestId}"]`);
       await expect(
@@ -74,6 +80,11 @@ test("AC-2 直接访问侧边栏全部路由无 404 M95.F02.I07", async ({ page 
   for (const item of NAV_ITEMS) {
     await page.locator(`[data-testid="sidebar-nav-item-${item.fnId}"]`).click();
     await page.waitForLoadState("networkidle");
+    // SPA 路由错配不产生 404 —— 落点必须渲染正确页标题
+    await expect(
+      page.getByText(item.heading).first(),
+      `导航 ${item.fnId} 应落至「${item.heading}」页`,
+    ).toBeVisible();
   }
   expect(bad, `发现死链/未 mock 端点：\n${bad.join("\n")}`).toEqual([]);
 });
