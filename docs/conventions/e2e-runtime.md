@@ -33,6 +33,12 @@ mock-friendly 语义（不起服时门禁照常可跑，E2E 用例仅在显式�
 若本机 `.env.local` 改指过真后端（5104/5105），跑 E2E 前改回 msw。
 CORS 已就绪：msw `src/server.ts` 白名单含 5101/5102/5103（multi-repo-family §6）。
 
+## 3.5 数据生命周期（2026-09-11）
+
+msw 无持久化但 handlers 会写内存——跨运行累积会撑爆分页首屏（flaky 实伤过 AC-4）。
+本仓 `globalSetup` 在每轮跑测前 POST `:5100/api/v1/__e2e/reset`（mock-server 专属调试端点，
+不进 shared 契约），fixtures 还原到启动快照。CI 同理（globalSetup 自动生效）。
+
 ## 4. 本仓 env
 
 见 `.env.example`（fail-fast，禁兜底）。真值进 `.env.local`（gitignored）；

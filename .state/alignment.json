@@ -4,12 +4,14 @@
   "functions": {
     "modules": 2,
     "features": 5,
-    "items": 7
+    "items": 9
   },
-  "warnings_total": 10,
+  "warnings_total": 14,
   "warnings": {
     "已上线但无设计映射": [
-      "M95.F02.I02"
+      "M95.F02.I02",
+      "M95.F02.I03",
+      "M95.F02.I04"
     ],
     "已上线但无测试引用": [
       "M95.F01.I02",
@@ -21,6 +23,8 @@
       "M95.F01.I02",
       "M95.F02.I01",
       "M95.F02.I02",
+      "M95.F02.I03",
+      "M95.F02.I04",
       "M95.F03.I01",
       "M95.F04.I01"
     ]
@@ -105,6 +109,38 @@
         "tests/tenant-crud.spec.ts::AC-2 创建租户：行出现且 toast 提示 M95.F02.I02 覆盖 M00.F01.I02",
         "tests/tenant-crud.spec.ts::AC-3 更新租户：名称变更落行 M95.F02.I02 覆盖 M00.F01.I04",
         "tests/tenant-crud.spec.ts::AC-4 删除租户：确认后行消失 M95.F02.I02 覆盖 M00.F01.I05"
+      ],
+      "entry": []
+    },
+    "M95.F02.I03": {
+      "name": "会话用例（登出+切换租户）",
+      "status": "已上线",
+      "type": "接口",
+      "requirements": [
+        "docs\\requirements\\REQ-2026-004-session.md"
+      ],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "tests/session.spec.ts::AC-1 登出：session 清理落回登录页 M95.F02.I03 覆盖 M01.F04.I06",
+        "tests/session.spec.ts::AC-2 切换租户：调 switch API + 切换器显示新租户 M95.F02.I03 覆盖 M01.F03.I02"
+      ],
+      "entry": []
+    },
+    "M95.F02.I04": {
+      "name": "角色 CRUD 用例",
+      "status": "已上线",
+      "type": "接口",
+      "requirements": [
+        "docs\\requirements\\REQ-2026-005-roles.md"
+      ],
+      "flows": [],
+      "designs": [],
+      "tests": [
+        "tests/role-crud.spec.ts::AC-1 角色列表渲染 seed 行 M95.F02.I04 覆盖角色列表",
+        "tests/role-crud.spec.ts::AC-2 创建角色：行出现 M95.F02.I04 覆盖创建",
+        "tests/role-crud.spec.ts::AC-3 更新角色：名称落行 M95.F02.I04 覆盖更新",
+        "tests/role-crud.spec.ts::AC-4 删除角色：确认后行消失 M95.F02.I04 覆盖删除"
       ],
       "entry": []
     },
