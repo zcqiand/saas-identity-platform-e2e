@@ -14,6 +14,7 @@ const TARGETS = [
 export default defineConfig({
   testDir: "tests",
   globalSetup: "./src/global-setup.ts",
+  globalTeardown: "./src/global-teardown.ts",
   timeout: 30_000,
   retries: 1, // 浏览器 E2E flaky 缓解（REQ-2026-001 风险表）
   reporter: [["list"], ["./src/trace-reporter.ts"]],

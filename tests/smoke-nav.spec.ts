@@ -77,3 +77,25 @@ test("AC-2 直接访问侧边栏全部路由无 404 M95.F02.I07", async ({ page 
   }
   expect(bad, `发现死链/未 mock 端点：\n${bad.join("\n")}`).toEqual([]);
 });
+
+test("AC-3 编辑菜单弹窗：类型/父菜单/状态必须回填行数据 M95.F02.I07", async ({ page }) => {
+  // 编辑弹窗字段回显缺口（类型/父菜单/状态为空）曾多次直达用户 —— 专项断言。
+  await loginViaUi(page);
+  await page.locator('[data-testid="sidebar-nav-item-M04.F04.I01"]').click();
+  await page.waitForLoadState("networkidle");
+
+  await page.getByRole("button", { name: "编辑" }).first().click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible();
+
+  // 每个 select 都必须有值（空值 = 显示「请选择」占位符 = 回填失败）
+  await expect(
+    dialog.getByText("请选择"),
+    "编辑弹窗存在未回填的下拉字段（类型/父菜单/状态）",
+  ).toHaveCount(0);
+
+  // 类型 = 契约词之一（目录/页面/按钮）；状态 = 启用/停用 之一
+  const dialogText = await dialog.innerText();
+  expect(/目录|页面|按钮/.test(dialogText), "类型下拉应回填契约词（目录/页面/按钮）").toBe(true);
+  expect(/启用|停用/.test(dialogText), "状态下拉应回填 启用/停用").toBe(true);
+});
