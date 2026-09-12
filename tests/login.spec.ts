@@ -2,7 +2,7 @@
 // 选择器只锚 data-fn 与可观察行为（ADR-0030 Decision 4）。
 // 三端公共锚：#username/#password、data-fn=M01.F04.I03 提交按钮、
 // 登录落点 /tenants、错误提示 sonner toast（三端同库家族）。
-// B 方案：clientId = ?client_id= ?? env LOGIN_CLIENT_ID（saas-console 自身应用 …1114）；
+// B 方案：clientId = ?client_id= ?? env LOGIN_CLIENT_ID（saas-console 自身应用；老值 …1114 是行 id 不是 client_id）；
 // E2E 走 env 兜底路径（直接打开 /login，不带 query）。
 import { test, expect } from "@playwright/test";
 import { requireE2eEnv } from "../src/env";

@@ -55,10 +55,10 @@ jobs:
           # msw：server.ts 用 dotenv/config 读 .env（JWT_* fail-fast，缺了 login 即炸）
           cp ../saas-identity-platform-msw/.env.example ../saas-identity-platform-msw/.env
           for repo in react vue; do
-            printf 'VITE_API_BASE_URL=http://localhost:5100\nVITE_LOGIN_CLIENT_ID=11111111-1111-1111-1111-111111111114\n' \
+            printf 'VITE_API_BASE_URL=http://localhost:5100\nVITE_LOGIN_CLIENT_ID=saas-console\n' \
               > ../saas-identity-platform-$repo/.env.local
           done
-          printf 'NEXT_PUBLIC_API_BASE_URL=http://localhost:5100\nNEXT_PUBLIC_SAAS_BASE_URL=http://localhost:5100\nNEXT_PUBLIC_LOGIN_CLIENT_ID=11111111-1111-1111-1111-111111111114\n' \
+          printf 'NEXT_PUBLIC_API_BASE_URL=http://localhost:5100\nNEXT_PUBLIC_SAAS_BASE_URL=http://localhost:5100\nNEXT_PUBLIC_LOGIN_CLIENT_ID=saas-console\n' \
             > ../saas-identity-platform-nextjs/.env.local
           cp .env.test .env.local
           echo "E2E_TEST_PASSWORD=${{ secrets.E2E_TEST_PASSWORD }}" >> .env.local
