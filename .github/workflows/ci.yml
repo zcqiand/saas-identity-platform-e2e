@@ -20,24 +20,14 @@ jobs:
         with:
           node-version: 22
 
-      # 4 个被测仓作为 sibling checkout（起服约定见 docs/conventions/e2e-runtime.md）
+      # 4 个被测仓作为 sibling checkout（起服约定见 docs/conventions/e2e-runtime.md）。
+      # 不用 actions/checkout：v4 拒绝 workspace 外路径（run 34707765007/34629627282
+      # 失败根因，lab-e2e 同病同修 a01db77），git clone 到 ../ 与本机 dev 布局逐字一致。
       - name: Checkout siblings (msw/react/vue/nextjs)
-        uses: actions/checkout@v4
-        with:
-          repository: zcqiand/saas-identity-platform-msw
-          path: ../saas-identity-platform-msw
-      - uses: actions/checkout@v4
-        with:
-          repository: zcqiand/saas-identity-platform-react
-          path: ../saas-identity-platform-react
-      - uses: actions/checkout@v4
-        with:
-          repository: zcqiand/saas-identity-platform-vue
-          path: ../saas-identity-platform-vue
-      - uses: actions/checkout@v4
-        with:
-          repository: zcqiand/saas-identity-platform-nextjs
-          path: ../saas-identity-platform-nextjs
+        run: |
+          for repo in msw react vue nextjs; do
+            git clone --depth 1 "https://github.com/zcqiand/saas-identity-platform-$repo.git" "../saas-identity-platform-$repo"
+          done
 
       - name: Install all
         run: |
