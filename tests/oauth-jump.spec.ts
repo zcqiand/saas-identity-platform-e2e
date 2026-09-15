@@ -1,10 +1,12 @@
 // M95.F02.I06 OAuth SSO 跳板 302 全链（REQ-2026-006 ④；覆盖 BASE 授权码签发+令牌交换的浏览器侧）
 // 这是 ADR-0015 明确留给 E2E 的洞：authorize 领 code → 浏览器真实跳转 redirect_uri?code&state。
-// lab-management（fixture …1111）redirectUri 白名单含 http://localhost:5201/callback。
+// lab-management 的 redirectUri 白名单含 http://localhost:5201/callback。
+// clientId 用 ADR-0032 D4 的 code 形（oauth_client.client_id 字符串）——旧的
+// `1111…111` 是 app 行 id 不是 clientId，authorize 必 INVALID_CLIENT。
 import { test, expect } from "@playwright/test";
 import { requireE2eEnv } from "../src/env";
 
-const LAB_CLIENT_ID = "11111111-1111-1111-1111-111111111111";
+const LAB_CLIENT_ID = "lab-management";
 const CALLBACK = "http://localhost:5201/callback";
 const USERNAME = requireE2eEnv("E2E_TEST_USERNAME");
 const PASSWORD = requireE2eEnv("E2E_TEST_PASSWORD");
