@@ -2,7 +2,7 @@
 // 背景：连串 bug（成员/应用/菜单页空白、faker 假数据、nav 死链 404）在单测/
 // 契约测试全绿的情况下到达用户浏览器 —— 缺口是「没有任何一层验证页面真的出数据」。
 // 本用例登录后遍历侧边栏全部导航项，对每个页面断言：
-//   1. 无 404/501/5xx API 响应（死链、msw NOT_MOCKED、后端异常）
+//   1. 无 404/501/5xx API 响应（死链、后端异常）
 //   2. 无 console error / pageerror
 //   3. 有列表的页面行数 > 0（空数据即红 —— 直击死桩/faker 两类假绿）
 // 断言锚 data-testid 行与用户可观察行为，不锚 DOM 结构（ADR-0030 Decision 4）。
@@ -46,7 +46,7 @@ test("AC-1 nav 冒烟遍历：全部页面可达、有数据、无错误 M95.F02
     await link.click();
     await page.waitForLoadState("networkidle");
 
-    // 1+2. 该页面无 API 错误、无脚本错误（死链 404 / msw 501 / 后端 5xx 全在此暴露）
+    // 1+2. 该页面无 API 错误、无脚本错误（死链 404 / 后端 5xx 全在此暴露）
     const errors = takeErrors().filter((e) => !errorsBefore.includes(e));
     expect(errors, `页面 ${item.fnId} 出现错误：\n${errors.join("\n")}`).toEqual([]);
 

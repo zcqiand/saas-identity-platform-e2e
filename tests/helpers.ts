@@ -12,7 +12,7 @@ export async function loginViaUi(page: Page): Promise<void> {
   await expect(page.locator("main, nav, aside, [data-fn]").first()).toBeVisible();
 }
 
-/** 本测试内唯一的业务 code（msw 无持久化，撞 seed/前次唯一约束只会来自并发自身）。 */
+/** 本测试内唯一的业务 code（DB 有持久化——撞 seed/前次唯一约束的风险靠唯一 code 根除）。 */
 export function uniqueCode(prefix: string): string {
   return `${prefix}-${Math.random().toString(36).slice(2, 8)}`;
 }

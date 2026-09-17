@@ -32,7 +32,7 @@ test("AC-2 勾选+保存：调 set API 且计数更新 M95.F02.I05 覆盖整批�
   await page.locator('[data-fn="M00.F04.I03"]').click();
   await setReq;
   await expect(page.locator("[data-sonner-toast]").first()).toBeVisible({ timeout: 10_000 });
-  // 还原（msw 内存无持久化但跨用例共享——写操作必须自产自销，勿污染后续读断言）
+  // 还原（后端 DB 持久化且跨用例共享——写操作必须自产自销，勿污染后续读断言）
   await firstCheckbox.click();
   const restoreReq = page.waitForRequest(
     (r) => r.url().includes("/roles/") && r.url().includes("/menus") && r.method() === "PUT",

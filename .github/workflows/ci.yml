@@ -1,6 +1,8 @@
 # E2E 三端一致性 — tag / nightly 触发（ADR-0030 Decision 7：不进每 commit）
-# 编排 mirror contract-test ci.yml：sibling checkout 4 被测仓 → 起 dev server → healthcheck → playwright。
-# 凭据走 secret：E2E_TEST_PASSWORD（msw 家族 DEMO_PASSWORD，公开值，仍走 secret 便于轮换）。
+# 编排 mirror lab-e2e ci.yml：sibling checkout 被测仓 → 起 dev server → healthcheck → playwright。
+# 2026-09-17 msw 仓已删（剔除设计 Phase 4 提前）：API 后端切真 saas-nextjs :5101，
+# CI 加 postgres service + shared migrate/seed 灌 saas_e2e scratch 库。
+# 凭据走 secret：E2E_TEST_PASSWORD（saas 家族 DEMO_PASSWORD，公开值，仍走 secret 便于轮换）。
 name: e2e
 on:
   push:
@@ -13,6 +15,23 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     timeout-minutes: 40
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: saas_e2e
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      # 被测 saas-nextjs 实际连的库（globalSetup 种子 upsert 同库）
+      E2E_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/saas_e2e
     steps:
       - uses: actions/checkout@v4
 
@@ -20,44 +39,57 @@ jobs:
         with:
           node-version: 22
 
-      # 4 个被测仓作为 sibling checkout（起服约定见 docs/conventions/e2e-runtime.md）。
+      # 被测仓 + shared（种子/迁移权威源）作为 sibling checkout（起服约定见 docs/conventions/e2e-runtime.md）。
       # 不用 actions/checkout：v4 拒绝 workspace 外路径（run 34707765007/34629627282
       # 失败根因，lab-e2e 同病同修 a01db77），git clone 到 ../ 与本机 dev 布局逐字一致。
-      - name: Checkout siblings (msw/react/vue/nextjs)
+      - name: Checkout siblings (shared/nextjs/react/vue)
         run: |
-          for repo in msw react vue nextjs; do
+          for repo in shared nextjs react vue; do
             git clone --depth 1 "https://github.com/zcqiand/saas-identity-platform-$repo.git" "../saas-identity-platform-$repo"
           done
 
       - name: Install all
         run: |
           npm ci --no-audit --no-fund || npm install --no-audit --no-fund
-          for repo in msw react vue nextjs; do
+          for repo in shared nextjs react vue; do
             (cd ../saas-identity-platform-$repo && (npm ci --no-audit --no-fund || npm install --no-audit --no-fund))
           done
 
       - name: Install chromium
         run: npx playwright install --with-deps chromium
 
-      # CI 无 .env.local（gitignored）——按各仓 .env.example 契约生成，API base 全指 msw :5100
+      # CI 无 .env.local（gitignored）——按各仓 .env.example 契约生成，API base 全指真 saas-nextjs :5101
       - name: Write env files
         run: |
-          # msw：server.ts 用 dotenv/config 读 .env（JWT_* fail-fast，缺了 login 即炸）
-          cp ../saas-identity-platform-msw/.env.example ../saas-identity-platform-msw/.env
+          # saas-nextjs：fail-fast key 全套来自 .env.example；DB 换 scratch 库、API base 指本仓。
+          # sed 锚定整行改值——append 同 key 行在 dotenv 里是 last-wins 赌博，不赌。
+          cp ../saas-identity-platform-nextjs/.env.example ../saas-identity-platform-nextjs/.env.local
+          sed -i 's|^DATABASE_URL=.*|DATABASE_URL=postgresql://postgres:postgres@localhost:5432/saas_e2e|' \
+            ../saas-identity-platform-nextjs/.env.local
+          sed -i 's|^PG_HOST=.*|PG_HOST=localhost|; s|^PG_PASSWORD=.*|PG_PASSWORD=postgres|; s|^PG_DATABASE=.*|PG_DATABASE=saas_e2e|' \
+            ../saas-identity-platform-nextjs/.env.local
+          sed -i 's|^DATABASE_NAME=.*|DATABASE_NAME=saas_e2e|' \
+            ../saas-identity-platform-nextjs/.env.local
+          sed -i 's|^NEXT_PUBLIC_SAAS_BASE_URL=.*|NEXT_PUBLIC_SAAS_BASE_URL=http://localhost:5101|; s|^NEXT_PUBLIC_API_BASE_URL=.*|NEXT_PUBLIC_API_BASE_URL=|; s|^NEXT_PUBLIC_API_MODE=.*|NEXT_PUBLIC_API_MODE=nextjs|' \
+            ../saas-identity-platform-nextjs/.env.local
           for repo in react vue; do
-            printf 'VITE_API_BASE_URL=http://localhost:5100\nVITE_LOGIN_CLIENT_ID=saas-console\n' \
+            printf 'VITE_API_BASE_URL=http://localhost:5101\nVITE_LOGIN_CLIENT_ID=saas-console\n' \
               > ../saas-identity-platform-$repo/.env.local
           done
-          printf 'NEXT_PUBLIC_API_BASE_URL=http://localhost:5100\nNEXT_PUBLIC_SAAS_BASE_URL=http://localhost:5100\nNEXT_PUBLIC_LOGIN_CLIENT_ID=saas-console\n' \
-            > ../saas-identity-platform-nextjs/.env.local
           cp .env.test .env.local
           echo "E2E_TEST_PASSWORD=${{ secrets.E2E_TEST_PASSWORD }}" >> .env.local
 
-      - name: Start 4 servers
+      # scratch 库建表 + 灌种（shared 权威源；globalSetup 跑前还会 upsert 一次还原）
+      - name: Migrate + seed scratch DB
+        run: |
+          (cd ../saas-identity-platform-shared && \
+            DATABASE_URL="$E2E_DATABASE_URL" node scripts/migrate-db.mjs && \
+            DATABASE_URL="$E2E_DATABASE_URL" node scripts/seed-db.mjs)
+
+      - name: Start 3 servers
         run: |
           mkdir -p .runtime-logs
           PIDS=()
-          (cd ../saas-identity-platform-msw && nohup npm run dev > "$OLDPWD/.runtime-logs/msw.log" 2>&1) & PIDS+=($!)
           (cd ../saas-identity-platform-nextjs && nohup npm run dev > "$OLDPWD/.runtime-logs/nextjs.log" 2>&1) & PIDS+=($!)
           (cd ../saas-identity-platform-react && nohup npm run dev > "$OLDPWD/.runtime-logs/react.log" 2>&1) & PIDS+=($!)
           (cd ../saas-identity-platform-vue && nohup npm run dev > "$OLDPWD/.runtime-logs/vue.log" 2>&1) & PIDS+=($!)
@@ -70,8 +102,7 @@ jobs:
             done
             echo "$1 FAILED"; tail -40 .runtime-logs/*.log; return 1
           }
-          healthcheck msw    http://localhost:5100/healthz
-          healthcheck nextjs http://localhost:5101/login
+          healthcheck nextjs http://localhost:5101/api/health
           healthcheck react  http://localhost:5102/login
           healthcheck vue    http://localhost:5103/login
 

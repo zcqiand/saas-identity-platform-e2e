@@ -1,4 +1,4 @@
-// 基建件契约测试：CI 编排（M95.F01.I02）/ trace 映射器（M95.F03.I01）/ msw 接线（M95.F04.I01）。
+// 基建件契约测试：CI 编排（M95.F01.I02）/ trace 映射器（M95.F03.I01）/ 后端接线（M95.F04.I01）。
 // 这三个子项不是浏览器交互，断言对象是仓内基建文件与映射器行为本身 —— 与
 // env-contract.spec.ts 读 playwright.config.ts 同款模式：锚仓内契约，不锚 DOM。
 import { readFileSync, writeFileSync } from "node:fs";
@@ -10,22 +10,25 @@ import TraceReporter from "../src/trace-reporter";
 
 const root = process.cwd();
 
-test("CI 编排：tag/nightly 触发 + 4 sibling checkout + healthcheck + 产物上传 M95.F01.I02", () => {
+test("CI 编排：tag/nightly 触发 + sibling checkout + healthcheck + 产物上传 M95.F01.I02", () => {
   const ci = readFileSync(resolve(root, ".github/workflows/ci.yml"), "utf-8");
   // 触发面：tag + nightly + 手动；不进每 commit（ADR-0030 Decision 7）
   expect(ci).toContain('tags: ["v*"]');
   expect(ci).toContain("schedule:");
   expect(ci).toContain("workflow_dispatch");
-  // 4 个被测仓 sibling checkout，一个不少
-  const siblings = new Set(ci.match(/saas-identity-platform-(msw|react|vue|nextjs)/g) ?? []);
+  // shared（种子/迁移权威源）+ 3 个被测仓 sibling checkout，一个不少
+  // （2026-09-17 msw 仓已删，API 后端切真 saas-nextjs :5101）
+  const siblings = new Set(ci.match(/saas-identity-platform-(shared|react|vue|nextjs)/g) ?? []);
   expect([...siblings].sort()).toEqual([
-    "saas-identity-platform-msw",
     "saas-identity-platform-nextjs",
     "saas-identity-platform-react",
+    "saas-identity-platform-shared",
     "saas-identity-platform-vue",
   ]);
+  // scratch 库 migrate + seed 在起服前完成
+  expect(ci).toContain("Migrate + seed scratch DB");
   // 起服 → healthcheck → 跑测 → 产物，链条完整
-  expect(ci).toContain("healthcheck msw");
+  expect(ci).toContain("healthcheck nextjs");
   expect(ci).toContain("npm run e2e");
   expect(ci).toContain("actions/upload-artifact");
   // 凭据走 secret，不落明文（ADR-0019 精神）
@@ -73,14 +76,14 @@ test("trace 映射器行为：收 M95.*、滤 BASE、inert 清空、retries 去�
   }
 });
 
-test("msw 默认目标接线：三端端口 5101-5103 + API base 约定 :5100（e2e-runtime §2/§3） M95.F04.I01", () => {
+test("后端目标接线：三端端口 5101-5103 + 真 API 后端 saas-nextjs :5101（e2e-runtime §2/§3） M95.F04.I01", () => {
   const envExample = readFileSync(resolve(root, ".env.example"), "utf-8");
   // 三端 URL 与起服清单端口一致（e2e-runtime.md §2：5101/5102/5103）
   expect(envExample).toContain("E2E_NEXTJS_URL=http://localhost:5101");
   expect(envExample).toContain("E2E_REACT_URL=http://localhost:5102");
   expect(envExample).toContain("E2E_VUE_URL=http://localhost:5103");
-  // API base 默认指 msw :5100 的接线约定登记在案（e2e-runtime.md §3）
+  // 2026-09-17 msw 仓已删：API 后端切真 saas-nextjs :5101，接线约定登记在案
   const runtime = readFileSync(resolve(root, "docs/conventions/e2e-runtime.md"), "utf-8");
   expect(runtime).toContain("M95.F04.I01");
-  expect(runtime).toContain("http://localhost:5100");
+  expect(runtime).toContain("http://localhost:5101");
 });

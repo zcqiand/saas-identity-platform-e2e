@@ -9,7 +9,7 @@
 ```bash
 npm install                 # 安装依赖（registry 走 npmmirror）
 cp .env.example .env.local  # 填真值（fail-fast，禁兜底）
-# 外部起好 4 个被测进程（msw:5100 + nextjs:5101 + react:5102 + vue:5103）
+# 外部起好 3 个被测进程（nextjs:5101 真 API 后端 + react:5102 + vue:5103）+ migrate/seed 灌好的 PG 库
 # 起服约定见 docs/conventions/e2e-runtime.md
 npm run e2e                 # 三 project 各跑一遍同一套 spec
 ```

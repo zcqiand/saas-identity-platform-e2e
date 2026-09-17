@@ -16,33 +16,39 @@ mock-friendly 语义（不起服时门禁照常可跑，E2E 用例仅在显式�
 
 | 序 | 仓 | 端口 | 命令（仓根） | 前置 |
 |---|---|---|---|---|
-| 1 | saas-identity-platform-msw | 5100 | `npm run dev` | 无（内存 fixture，无 DB） |
-| 2 | saas-identity-platform-nextjs | 5101 | `npm run dev` | msw 在跑 |
-| 3 | saas-identity-platform-react | 5102 | `npm run dev` | msw 在跑 |
-| 4 | saas-identity-platform-vue | 5103 | `npm run dev` | msw 在跑 |
+| 1 | saas-identity-platform-nextjs | 5101 | `npm run dev` | PG 库在位（migrate + seed，见 §3.5） |
+| 2 | saas-identity-platform-react | 5102 | `npm run dev` | nextjs 在跑 |
+| 3 | saas-identity-platform-vue | 5103 | `npm run dev` | nextjs 在跑 |
 
-健康检查：msw `GET :5100/healthz` 返回 `mode:'msw'`。
+健康检查：nextjs `GET :5101/api/health` 返回 200。API 后端 = 真 saas-nextjs
+（2026-09-17 msw 仓已删，剔除设计 Phase 4 提前；同款 `/api/v1/auth/login` 契约）。
 
-## 3. 前端 API base：默认即 msw，跑 E2E 前须确认
+## 3. 前端 API base：跑 E2E 前须确认
 
-三前端仓 `.env.example` 的默认 API base **已指向 msw :5100**：
+三前端 API base 必须指向被测 saas-nextjs :5101：
 
-- react / vue：`VITE_API_BASE_URL=http://localhost:5100`
-- nextjs：`NEXT_PUBLIC_SAAS_BASE_URL` / `NEXT_PUBLIC_API_BASE_URL=http://localhost:5100`
+- react / vue：`VITE_API_BASE_URL=http://localhost:5101`
+- nextjs：`NEXT_PUBLIC_SAAS_BASE_URL` / `NEXT_PUBLIC_API_BASE_URL=http://localhost:5101`
+  （API 走同源本仓 /api/v1 时可留空）
 
-若本机 `.env.local` 改指过真后端（5104/5105），跑 E2E 前改回 msw。
-CORS 已就绪：msw `src/server.ts` 白名单含 5101/5102/5103（multi-repo-family §6）。
+CI 已内置这些覆盖（ci.yml envs）；本机 `.env.local` 若指过其它后端（5104/5105），
+跑 E2E 前改回。CORS：saas-nextjs `SAAS_CORS_ALLOWED_ORIGINS` 白名单含
+5101/5102/5103（multi-repo-family §6）。
 
-## 3.5 数据生命周期（2026-09-11）
+## 3.5 数据生命周期（2026-09-11 建；2026-09-17 切真后端后语义更新）
 
-msw 无持久化但 handlers 会写内存——跨运行累积会撑爆分页首屏（flaky 实伤过 AC-4）。
-本仓 `globalSetup` 在每轮跑测前 POST `:5100/api/v1/__e2e/reset`（mock-server 专属调试端点，
-不进 shared 契约），fixtures 还原到启动快照。CI 同理（globalSetup 自动生效）。
+真后端 DB 持久化——跨运行累积会撑爆分页首屏（flaky 实伤过 AC-4）。
+本仓 `globalSetup` 在每轮跑测前跑 shared `scripts/seed-db.mjs` **upsert 重灌**
+（`E2E_DATABASE_URL` 指向被测 saas-nextjs 实际连的库），把写路径用例翻转过的
+种子行还原；自产行靠唯一 code（`uniqueCode`），不依赖删除式清理。
+`globalTeardown` 同款再灌一次，防失败泄漏残留污染开发者手动浏览。
+CI 用一次性 `saas_e2e` scratch 库（见 ci.yml postgres service），
+本机默认打 saas_dev——介意污染可给 saas-nextjs 换 scratch 库再跑。
 
 ## 4. 本仓 env
 
 见 `.env.example`（fail-fast，禁兜底）。真值进 `.env.local`（gitignored）；
-登录凭据 = msw users fixture 用户名 + 家族 DEMO_PASSWORD，**不进断言/注释**。
+登录凭据 = saas seeds 用户 + 家族 DEMO_PASSWORD（dev 种子 `plain:` 前缀口径），**不进断言/注释**。
 
 ## 5. live 模式（未建）
 
