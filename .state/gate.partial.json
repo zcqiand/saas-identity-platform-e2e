@@ -3,20 +3,20 @@
   "project": "saas-identity-platform-e2e",
   "tier": "full",
   "excluded_tier": [],
-  "passed": false,
+  "passed": true,
   "partial": true,
   "ran": [
-    "L4"
+    "L0"
   ],
-  "checked_at": "2026-09-20T11:33:30+0800",
+  "checked_at": "2026-10-26T18:06:14+0800",
   "gates": [
     {
-      "level": "L4",
-      "name": "E2E 三端一致性",
-      "passed": false,
-      "returncode": 1,
-      "duration_s": 1.515,
-      "output": "[INFO][gate-inject] E2E_NEXTJS_URL <- saas-identity-platform-e2e/.env.test（通用通道，调用方未设）\n[INFO][gate-inject] E2E_REACT_URL <- saas-identity-platform-e2e/.env.test（通用通道，调用方未设）\n[INFO][gate-inject] E2E_VUE_URL <- saas-identity-platform-e2e/.env.test（通用通道，调用方未设）\n[INFO][gate-inject] E2E_TEST_USERNAME <- saas-identity-platform-e2e/.env.test（通用通道，调用方未设）\n[INFO][gate-inject] E2E_TEST_PASSWORD <- saas-identity-platform-e2e/.env.test（通用通道，调用方未设）\n[INFO][gate-inject] E2E_DATABASE_URL <- saas-identity-platform-e2e/.env.test（通用通道，调用方未设）\n[INFO][gate-inject] E2E_TEST_CLIENT_ID <- saas-identity-platform-e2e/.env.test（通用通道，调用方未设）\n[seed-db] 连接 postgresql://postgres:***@localhost:5432/saas_e2e ...\nError: [e2e globalSetup] seed-db upsert 失败（exit 1）。检查 E2E_DATABASE_URL 与库可达性。\n\n   at ..\\src\\global-setup.ts:36\n\n  34 |   );\n  35 |   if (r.status !== 0) {\n> 36 |     throw new Error(\n     |           ^\n  37 |       `[e2e globalSetup] seed-db upsert 失败（exit ${r.status}）。` +\n  38 |         `检查 E2E_DATABASE_URL 与库可达性。`,\n  39 |     );\n    at reseed (D:\\qiand-life\\1-projects\\xr-code-suite\\output\\saas-identity-platform-e2e\\src\\global-setup.ts:36:11)\n    at globalSetup (D:\\qiand-life\\1-projects\\xr-code-suite\\output\\saas-identity-platform-e2e\\src\\global-setup.ts:46:3)\n[seed-db] 连接 postgresql://postgres:***@localhost:5432/saas_e2e ...\n\n\n[seed-db] ERROR: �û� \"postgres\" Password ��֤ʧ��\n\n[seed-db] ERROR: �û� \"postgres\" Password ��֤ʧ��"
+      "level": "L0",
+      "name": "结构完整性",
+      "passed": true,
+      "returncode": 0,
+      "duration_s": 0.094,
+      "output": ""
     }
   ]
 }

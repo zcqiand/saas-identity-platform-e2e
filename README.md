@@ -7,11 +7,10 @@
 ## 快速开始
 
 ```bash
-npm install                 # 安装依赖（registry 走 npmmirror）
-cp .env.example .env.local  # 填真值（fail-fast，禁兜底）
-# 外部起好 3 个被测进程（nextjs:5101 真 API 后端 + react:5102 + vue:5103）+ migrate/seed 灌好的 PG 库
-# 起服约定见 docs/conventions/e2e-runtime.md
-npm run e2e                 # 三 project 各跑一遍同一套 spec
+# 前置：node + npm（依赖一律走 npmmirror）
+npm install --registry=https://registry.npmmirror.com           # 安装依赖
+npx --no tsc --noEmit          # L3 类型
+npx --no playwright test       # L4 e2e parity suite（react/vue/nextjs 参数化）
 ```
 
 ## 功能特性
@@ -22,7 +21,7 @@ npm run e2e                 # 三 project 各跑一遍同一套 spec
 
 | 技术 | 版本 |
 | :--- | :--- |
-| __STACK_DESC_LINE__ | |
+| Playwright / TypeScript | ^1.63.0 / ^7.0.2（package.json 钉版） |
 
 > 依赖版本与 `version-lock.json` 的 `version_lock` 一致，不引入 lock 外的库。
 
