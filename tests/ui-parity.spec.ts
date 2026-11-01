@@ -31,7 +31,10 @@ const PAGES: PageManifest[] = [
   {
     fnId: "M00.F02.I01",
     headers: ["用户名", "邮箱", "状态", "角色", "操作"],
-    buttons: ["邀请用户", "分配角色", "编辑", "删除"],
+    // 2026-11-01 5.124②：基准对齐功能树——I02 创建成员 + I06 邀请成员均为已上线
+    // （function-tree M00.F02；react/vue 双按钮早已齐）。旧基准「邀请用户」是
+    // nextjs 独有的误标（createTenantUser=I02 语义），随 nextjs UI 补齐一并更新。
+    buttons: ["创建成员", "邀请成员", "分配角色", "编辑", "删除"],
   },
   {
     fnId: "M00.F03.I01",

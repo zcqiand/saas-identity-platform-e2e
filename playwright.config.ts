@@ -13,6 +13,11 @@ const TARGETS = [
 
 export default defineConfig({
   testDir: "tests",
+  // 5.124②（2026-11-01）：三 project 共享一份后端 DB（本机=saas_dev），写路径用例
+  // 即使自产自销也存在瞬态窗口——并行 worker 下 A 项目的读断言会撞 B 项目的写中途态
+  // （实证：vue role-menu AC-2 保存 26 瞬态 + AC-3 清空留 0，nextjs AC-1 撞假红）。
+  // 串行化是一致性验收的正确姿态；时长代价可接受（单轮 ~2-5min）。
+  workers: 1,
   globalSetup: "./src/global-setup.ts",
   globalTeardown: "./src/global-teardown.ts",
   timeout: 30_000,

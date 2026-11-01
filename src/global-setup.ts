@@ -44,4 +44,39 @@ export default async function globalSetup(): Promise<void> {
   // fail-fast：种库前先验 env 在位（seed-db.mjs 自己也 fail-fast）
   requireE2eEnv("E2E_DATABASE_URL");
   reseed();
+  await captureGrantBaseline();
+}
+
+/** 5.124②：种库后立刻取 acmeAdmin 授权基线，落盘交接给 role-menu-grant.spec。
+ *  为什么在 globalSetup 取：spec 的 beforeAll 晚于前序 project 的写路径用例
+ *  （AC-3 清空留 0）——那时 DB 已被污染，取到的「基线」是脏的（2026-11-01 r3 实证
+ *  baseline=0 → AC-2 断言 保存(-1)）。种库后此刻 DB=纯种子态，基线唯一可信。
+ *  globalSetup 与用例分属转译上下文，模块态不可共享 → test-results 临时文件交接。 */
+async function captureGrantBaseline(): Promise<void> {
+  const base = requireE2eEnv("E2E_NEXTJS_URL");
+  const loginRes = await fetch(`${base}/api/v1/auth/login`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      username: requireE2eEnv("E2E_TEST_USERNAME"),
+      password: requireE2eEnv("E2E_TEST_PASSWORD"),
+      clientId: requireE2eEnv("E2E_TEST_CLIENT_ID"),
+    }),
+  });
+  if (!loginRes.ok) {
+    throw new Error(`[e2e globalSetup] 基线取数登录失败 ${loginRes.status}`);
+  }
+  const { accessToken } = (await loginRes.json()) as { accessToken: string };
+  const menusRes = await fetch(
+    `${base}/api/v1/tenants/00000000-0000-0000-0000-000000000001/roles/00000000-0000-0000-0000-a00000000001/menus`,
+    { headers: { authorization: `Bearer ${accessToken}` } },
+  );
+  if (!menusRes.ok) {
+    throw new Error(`[e2e globalSetup] GET 授权基线失败 ${menusRes.status}`);
+  }
+  const { menuIds } = (await menusRes.json()) as { menuIds: string[] };
+  const { mkdirSync, writeFileSync } = await import("node:fs");
+  const outFile = resolve(__dirname, "../test-results/grant-baseline.json");
+  mkdirSync(resolve(__dirname, "../test-results"), { recursive: true });
+  writeFileSync(outFile, JSON.stringify({ menuIds }));
 }
